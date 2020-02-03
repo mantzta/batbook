@@ -1,0 +1,20 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(type='text/javascript' src='/javascripts/jquery-1.12.0.min.js')
+  body
+    div(id='navi' class='fullHeight')
+        ul
+          li 
+            a(href='/newsfeed' id='newsfeed' title='newsfeed')
+          li 
+            a(href='/messages' id='messages' title='messages')
+          li 
+            a(href='/profile?user=#{loggeduser}' id='profile' title='profile')
+          li 
+            a(href='/logout' id='logout' title='logout')
+        
+    block content
+    

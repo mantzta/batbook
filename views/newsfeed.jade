@@ -1,0 +1,48 @@
+extends layoutlogged
+
+block content
+  div(id='bg' onclick='closePic()')
+    div(id='bigPic' onclick='closePic()')
+  
+  div(id='form' class='fullHeight centered')
+    
+    h1 Hello #{loggeduser}
+    p Write something to the world of bats.
+    p(id='pmessage')= message
+    form(method='post' action='/newsfeed' enctype='multipart/form-data' name='form' onsubmit='return validateForm()')
+      p 
+        textarea(rows='22' cols='40' name='newstext' id='newstext')
+        
+      div(id='styleform')
+        p
+          input(type='file' name='newspic' id='newspic' multiple)
+    
+        p 
+          input(type='submit', value='Send your news!', id='newsSendButton')
+  
+  div(id='content')
+    
+        if(newslist != null)
+        
+              each news in newslist
+                div(class='newsbox')
+                
+                  if(news.newspics != null)
+                      each pic in news.newspics
+
+                          div(class='imgbox')
+                            if(news.newspics != null)
+                            
+                              -var img= '"images/_newspics/' + pic.filename + '"'
+                              img(onclick='openPic(#{img})' src= pic.thumbnail)
+                          
+
+                  div(class='textbox')
+                    if(news.newstext != null)
+                      p= news.newstext
+                  
+                div(class='infobox')
+                  a(href='/profile?user=#{news.user}') #{news.user} 
+                  span wrote something
+  
+  script(src="/javascripts/newsfeedlogic.js")

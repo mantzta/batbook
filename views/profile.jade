@@ -1,0 +1,137 @@
+extends layoutlogged
+
+block content
+  
+  div(id='contentprofile')
+  
+        div(id='profilepic')
+
+            if(user.profilepic != null)
+              img(src='#{user.profilepic}')
+            else
+              if(user.vampire == true)
+                img(src='images/_layout/bataltdracula.png')
+              else
+                img(src='images/_layout/batalt.png')
+                
+                
+        if(user.vampire == true)
+              h1 Hello, my name is #{user.username} and I am a vampire.
+
+        else
+              h1 Hello, my name is #{user.username}.
+        
+        if(user.username != loggeduser)
+          a(href='/messages?to=#{user.username}') Write me. We could be friends!
+        
+              
+        div(id='profileinfo')
+
+            each food in user.favfood
+               img(src='images/_layout/#{food}.png')
+
+
+              -var bloodstring= ''
+              -var first= true
+
+              -var count= 1
+              
+              div(id='bloodcontent')
+                  each blood in user.favblood
+
+                    if(first)
+                      -bloodstring+= blood 
+                      -first= false
+                    else
+                      -bloodstring+= ', ' + blood
+                    
+                    
+                    div(class='bloodboth')
+                        img(src='images/_layout/blood.png' onmouseover='showtext("#{blood}", "blood#{count}")' onmouseleave='hidetext("blood#{count}")' )
+                        div(id='blood#{count}')
+                        -count++
+                    
+                div(class='clear')
+
+
+            if(user.username == loggeduser)
+              div(class='show') Update your information
+
+          div(id='update')
+            div(id='updateform')
+                p(id='pmessage')
+                form(method='post' action='/profile' enctype='multipart/form-data' name='form' onsubmit='return validateForm()')
+                  p(class='pstyle') 
+                    label Favourite food
+
+                    if(user.favfood.indexOf('banana') >= 0)
+                      input(type="checkbox", name="food[]", value="banana", checked)
+                      span banana
+                    else
+                      input(type="checkbox", name="food[]", value="banana")
+                      span banana
+
+                    if(user.favfood.indexOf('grapes') >= 0)
+                      input(type="checkbox", name="food[]", value="grapes", checked)
+                      span grapes
+                    else
+                      input(type="checkbox", name="food[]", value="grapes")
+                      span grapes
+
+                    if(user.favfood.indexOf('mango') >= 0)
+                      input(type="checkbox", name="food[]", value="mango", checked)
+                      span mango
+                    else
+                      input(type="checkbox", name="food[]", value="mango")
+                      span mango
+
+                    if(user.favfood.indexOf('orange') >= 0)
+                      input(type="checkbox", name="food[]", value="orange", checked)
+                      span orange
+                    else
+                      input(type="checkbox", name="food[]", value="orange")
+                      span orange
+
+                    if(user.favfood.indexOf('papaya') >= 0)
+                      input(type="checkbox", name="food[]", value="papaya", checked)
+                      span papaya
+                    else
+                      input(type="checkbox", name="food[]", value="papaya")
+                      span papaya
+
+                    if(user.favfood.indexOf('avocado') >= 0)
+                      input(type="checkbox", name="food[]", value="avocado", checked)
+                      span avocado
+                    else
+                      input(type="checkbox", name="food[]", value="avocado")
+                      span avocado
+
+
+                  p(class='pstyle') 
+                    label Favourite blood (seperate with comma)
+                    input(type="text" value='#{bloodstring}' size=80 name='blood' id='blood')
+                    span(id='check')
+
+                  p(class='pstyle') 
+                    label I am a vampire!
+                    input(type="radio", name="vampire", value='yes')
+                    span Yes!
+
+                    input(type="radio", name="vampire", value='no')
+                    span No. But maybe one day.
+
+                  p(class='pstyle') 
+                    label Profile picture
+                    input(type='file' name='profilepic' id='pic')
+
+                  p(class='pstyle') 
+                    label Delete profile picture:
+                    input(type="checkbox", name="deletepic", value='yes')
+                    span Yes 
+
+                  p(class='pstyle')  
+                    input(type='submit', value='Update', id='sendButton')
+
+            div(class='nonshow') Hide again
+  
+  script(src="/javascripts/profilelogic.js")

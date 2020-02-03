@@ -1,0 +1,61 @@
+extends layout
+block content
+  div(id='white')
+  // Registrieren
+  div(id='register')
+
+      p(id='messageReg' class='warn')= messageReg
+      form(method='POST', action='/signup', onsubmit='return validateRegisterForm()', name='form2')
+        p
+          label E-Mail
+          input(type='text' name='email' id='emailregister')
+          span(id='emailcheck' class='checkregister')
+        p
+          label Password
+          input(type='password' name='password' id='pwregister')
+          span(id='pwcheck' class='checkregister')
+        p
+          label Username
+          input(type='text' name='username' id='username' onkeyup='setTimer(checkUsername)' onkeydown='clearTimer()' autocomplete="off")
+          span(id='checked') Still free?
+        p 
+          input(type='submit', value='Register', id='registerButton')
+  
+  div(id='wrapper')
+  
+    div(id='logcontentwrapper')
+        div(id='logincontent')
+        
+            h1 This is #{title}!
+
+            // Login
+            div(id='login')
+              p(id='messageLog' class='warn')= message
+              form(method='POST', action='/', onsubmit='return validateForm()', name='form')
+                p
+                  label E-Mail
+                  input(type='text' name='email' id='emaillogin')
+                p
+                  label Password
+                  input(type='password' name='password' id='pwlogin')
+                p 
+                  input(type='submit', value='Login', id='loginButton')
+
+
+        div(class='show' id='registerbutton')
+            p Register now!
+
+
+
+        // Registerbox muss erscheinen, wenn das Formular abgeschickt wurde und es eine Message gibt.
+        if messageReg != ''
+          script.
+            document.getElementById('register').className += " noHide";
+            document.getElementById('white').className += " noHide";
+
+        else
+          script.
+            document.getElementById('register').className += " hide";
+            document.getElementById('white').className += " hide";
+
+      script(src="/javascripts/loginlogic.js")

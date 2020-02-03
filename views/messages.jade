@@ -1,0 +1,121 @@
+extends layoutlogged
+
+block content
+
+  div(id='mesList' class='fullHeight scrollable')
+  
+    div(id='test')
+  
+    if(currentlyActive == '#new')
+      div(class='active') Write a new message!
+    else
+      div(class='userlink light')
+        a(href='/messages') Write a new message!
+      
+    if(allMessages != null)
+        -var count= 0
+        each userlink in allMessages
+    
+              
+              
+            if(count%2 == 0)
+                
+                if(currentlyActive == userlink.linkname)
+                  div(class='active') #{userlink.linkname}
+                  
+                else
+                
+                    if(userlink.notread == true)
+                        div(class='notread userlink dark')
+                          a(href='/messages?user=#{userlink.linkname}') #{userlink.linkname}
+                    else
+                        div(class='userlink dark')
+                          a(href='/messages?user=#{userlink.linkname}') #{userlink.linkname}
+                          
+                -count++
+
+                        
+            else
+            
+               if(currentlyActive == userlink.linkname)
+                  div(class='active') #{userlink.linkname}
+               else
+                
+                    if(userlink.notread == true)
+                        div(class='notread userlink light')
+                          a(href='/messages?user=#{userlink.linkname}') #{userlink.linkname}
+                    else
+                        div(class='userlink light')
+                          a(href='/messages?user=#{userlink.linkname}') #{userlink.linkname}
+                          
+                -count++
+                
+            
+  
+  
+  
+  
+  div(id='content')
+    
+    if(currentlyActive != '#new')
+        div(class='contentspace')
+
+          div(id='scrollable')
+              each mes in allMessages[currentlyActive].messages
+
+                if(mes.by == loggeduser)
+                  div(class='self')
+                    div(class='info')
+                       a(href='/profile?user=#{mes.by}') #{mes.by} 
+                       span wrote...
+                    p= mes.text
+                else
+                  div(class='other')
+                    div(class='info')
+                      a(href='/profile?user=#{mes.by}') #{mes.by} 
+                      span wrote...
+                    p= mes.text
+
+          div(id='userform')
+
+           form(method='post' action='/messages' name='form2' onsubmit='return validateForm2()' autocomplete='off')
+             p
+               input(type='hidden' name='username' id='username' value='#{currentlyActive}')
+             p 
+               textarea(rows='10' cols='80' name='mestext' id='mestext')
+
+             p 
+               input(type='submit', value='Send your message!', id='sendButton')
+               
+           p(id='pmessage')= message
+            
+            
+    else
+      div(class='contentspace')
+          p(id='pmessage')= message
+          p(id='generalinfo') Please separate Usernames with comma (either ", " or "," is possible).
+
+          form(method='post' action='/messages' name='form' onsubmit='return validateForm()' autocomplete='off')
+          
+            if(to)
+                p
+                input(type='text' name='username' id='username' onkeyup='setTimer(checkUsername)' onkeydown='clearTimer()' value='#{to}')
+              
+            else
+                p
+                  input(type='text' name='username' id='username' onkeyup='setTimer(checkUsername)' onkeydown='clearTimer()')
+            
+            
+            p 
+              textarea(rows='22' cols='80' name='mestext' id='mestext')
+
+            p 
+              input(type='submit', value='Send your message!', id='sendButton')
+
+  script(src="/javascripts/messageslogic.js")
+  
+  if(to)
+    script.
+       setUsernameFilledTrue();
+    
+    
